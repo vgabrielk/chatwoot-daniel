@@ -1,6 +1,6 @@
 # Baseado na imagem oficial do Chatwoot já compilada
 # Isso evita compilar todas as gems nativas do zero (que leva 1+ hora em Alpine)
-FROM chatwoot/chatwoot:v3.13.1
+FROM chatwoot/chatwoot:v4.15.1
 
 # Copia apenas os arquivos customizados por cima da imagem oficial
 # 1. Policy de visibilidade de conversas (apenas conversas atribuídas ao agente)
