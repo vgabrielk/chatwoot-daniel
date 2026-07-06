@@ -1,0 +1,40 @@
+# Ignore bundler config.
+/.bundle
+
+# Ignore the default SQLite database.
+/db/*.sqlite3
+/db/*.sqlite3-journal
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+*.mmdb
+
+# Ignore Byebug command history file.
+.byebug_history
+.DS_Store
+*.log
+
+# Ignore application configuration
+node_modules
+master.key
+*.rdb
+
+# Ignore env files
+.env
+
+public/uploads
+public/packs*
+public/assets/administrate*
+public/assets/action*.js
+public/assets/activestorage*.js
+public/assets/trix*
+public/assets/belongs_to*.js
+public/assets/manifest*.js
+coverage/
+cypress/videos/
+cypress/screenshots/
+test-results/
+playwright-report/
