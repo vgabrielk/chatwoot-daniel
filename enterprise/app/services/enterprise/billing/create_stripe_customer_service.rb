@@ -1,6 +1,4 @@
 class Enterprise::Billing::CreateStripeCustomerService
-  include BillingHelper
-
   pattr_initialize [:account!]
 
   DEFAULT_QUANTITY = 2
@@ -23,20 +21,11 @@ class Enterprise::Billing::CreateStripeCustomerService
 
   def prepare_customer_id
     customer_id = account.custom_attributes['stripe_customer_id']
-    customer_id = Stripe::Customer.create(customer_params).id if customer_id.blank?
+    if customer_id.blank?
+      customer = Stripe::Customer.create({ name: account.name, email: billing_email })
+      customer_id = customer.id
+    end
     customer_id
-  end
-
-  # Only currencies that need a country override (e.g. BRL/PIX) set address/locale; usd keeps Stripe defaults.
-  def customer_params
-    params = { name: account.name, email: billing_email }
-    country = Enterprise::Billing::Currencies.country_for(account.billing_currency)
-    return params if country.blank?
-
-    params.merge(
-      address: { country: country },
-      preferred_locales: [Enterprise::Billing::Currencies.preferred_locale_for(account.billing_currency)]
-    )
   end
 
   def default_quantity
@@ -48,11 +37,13 @@ class Enterprise::Billing::CreateStripeCustomerService
   end
 
   def default_plan
-    @default_plan ||= Enterprise::Billing::PlanConfiguration.default_plan
+    installation_config = InstallationConfig.find_by(name: 'CHATWOOT_CLOUD_PLANS')
+    @default_plan ||= installation_config.value.first
   end
 
   def price_id
-    Enterprise::Billing::PlanConfiguration.price_id_for(default_plan, account.billing_currency)
+    price_ids = default_plan['price_ids']
+    price_ids.first
   end
 
   def active_subscription
@@ -69,7 +60,7 @@ class Enterprise::Billing::CreateStripeCustomerService
   end
 
   def default_plan_subscription?(subscription)
-    Enterprise::Billing::PlanConfiguration.plan_contains_product_id?(default_plan, subscription['plan']['product'])
+    default_plan['price_ids'].include?(subscription['plan']['id'])
   end
 
   def build_custom_attributes(customer_id, subscription)
@@ -80,14 +71,14 @@ class Enterprise::Billing::CreateStripeCustomerService
       'plan_name' => default_plan['name'],
       'subscribed_quantity' => subscription['quantity'],
       'subscription_status' => subscription['status'],
-      'subscription_ends_on' => subscription_ends_on(subscription),
-      'billing_currency' => billing_currency_for(subscription)
+      'subscription_ends_on' => subscription_ends_on(subscription)
     )
   end
 
-  # Persist the currency Stripe actually billed, read straight from the price; the
-  # requested currency may lack a configured price and fall back to usd.
-  def billing_currency_for(subscription)
-    Enterprise::Billing::Currencies.to_supported(subscription['plan']['currency'])
+  def subscription_ends_on(subscription)
+    period_end = subscription['current_period_end']
+    return if period_end.blank?
+
+    Time.zone.at(period_end)
   end
 end

@@ -1,4 +1,4 @@
-providers:
+aproviders:
   openai:
     display_name: 'OpenAI'
   anthropic:
@@ -59,10 +59,6 @@ models:
     provider: openai
     display_name: 'Whisper'
     credit_multiplier: 1
-  gpt-4o-mini-transcribe:
-    provider: openai
-    display_name: 'GPT-4o Mini Transcribe'
-    credit_multiplier: 1
   text-embedding-3-small:
     provider: openai
     display_name: 'Text Embedding 3 Small'
@@ -86,7 +82,6 @@ features:
   assistant:
     models:
       [
-        gpt-4.1-mini,
         gpt-5-mini,
         gpt-4.1,
         gpt-5.1,
@@ -96,11 +91,10 @@ features:
         gemini-3-flash,
         gemini-3-pro,
       ]
-    default: gpt-4.1
+    default: gpt-5.1
   copilot:
     models:
       [
-        gpt-4.1-mini,
         gpt-5-mini,
         gpt-4.1,
         gpt-5.1,
@@ -110,52 +104,14 @@ features:
         gemini-3-flash,
         gemini-3-pro,
       ]
-    default: gpt-4.1
+    default: gpt-5.1
   label_suggestion:
     models:
       [gpt-4.1-nano, gpt-4.1-mini, gpt-5-mini, gemini-3-flash, claude-haiku-4.5]
-    default: gpt-4.1-mini
-  document_faq_generation:
-    models:
-      [
-        gpt-4.1-mini,
-        gpt-5-mini,
-        gpt-4.1,
-        gpt-5.1,
-        gpt-5.2,
-        claude-haiku-4.5,
-        claude-sonnet-4.5,
-        gemini-3-flash,
-        gemini-3-pro,
-      ]
-    default: gpt-4.1-mini
-  pdf_faq_generation:
-    models: [gpt-4.1-mini, gpt-5-mini, gpt-4.1, gpt-5.1, gpt-5.2]
-    default: gpt-4.1-mini
-  help_center_article_generation:
-    models:
-      [
-        gpt-4.1-mini,
-        gpt-5-mini,
-        gpt-4.1,
-        gpt-5.1,
-        gpt-5.2,
-        claude-haiku-4.5,
-        claude-sonnet-4.5,
-        gemini-3-flash,
-        gemini-3-pro,
-      ]
-    default: gpt-5.2
-  onboarding_content_generation:
-    models:
-      [gpt-4.1, gpt-4.1-mini, gpt-5-mini, gpt-5.1, gpt-5.2]
-    default: gpt-4.1
-  help_center_query_translation:
-    models: [gpt-4.1-nano, gpt-4.1-mini, gpt-5-mini]
     default: gpt-4.1-nano
   audio_transcription:
-    models: [gpt-4o-mini-transcribe, whisper-1]
-    default: gpt-4o-mini-transcribe
+    models: [whisper-1]
+    default: whisper-1
   help_center_search:
     models: [text-embedding-3-small]
     default: text-embedding-3-small

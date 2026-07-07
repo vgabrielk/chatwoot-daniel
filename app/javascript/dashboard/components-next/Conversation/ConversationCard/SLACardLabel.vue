@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
-import { evaluateSLAStatus } from 'dashboard/helper/slaHelper';
+import { evaluateSLAStatus } from '@chatwoot/utils';
 
 const props = defineProps({
   conversation: {
@@ -19,8 +19,16 @@ const slaStatus = ref({
   icon: null,
 });
 
+// TODO: Remove this once we update the helper from utils
+// https://github.com/chatwoot/utils/blob/main/src/sla.ts#L73
+const convertObjectCamelCaseToSnakeCase = object => {
+  return Object.keys(object).reduce((acc, key) => {
+    acc[key.replace(/([A-Z])/g, '_$1').toLowerCase()] = object[key];
+    return acc;
+  }, {});
+};
+
 const appliedSLA = computed(() => props.conversation?.appliedSla);
-const slaEvents = computed(() => props.conversation?.slaEvents);
 const isSlaMissed = computed(() => slaStatus.value?.isSlaMissed);
 
 const hasSlaThreshold = computed(() => {
@@ -33,9 +41,8 @@ const slaStatusText = computed(() => {
 
 const updateSlaStatus = () => {
   slaStatus.value = evaluateSLAStatus({
-    appliedSla: appliedSLA.value || {},
+    appliedSla: convertObjectCamelCaseToSnakeCase(appliedSLA.value || {}),
     chat: props.conversation,
-    slaEvents: slaEvents.value || [],
   });
 };
 

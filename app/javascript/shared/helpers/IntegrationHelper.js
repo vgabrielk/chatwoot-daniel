@@ -1,11 +1,5 @@
-const DYTE_MEETING_LINK = 'https://examples.realtime.cloudflare.com/meeting/';
+const DYTE_MEETING_LINK = 'https://app.dyte.io/v2/meeting';
 
 export const buildDyteURL = dyteAuthToken => {
-  const params = new URLSearchParams({
-    authToken: dyteAuthToken,
-    showSetupScreen: true,
-    disableVideoBackground: true,
-  });
-
-  return `${DYTE_MEETING_LINK}?${params.toString()}`;
+  return `${DYTE_MEETING_LINK}?authToken=${dyteAuthToken}&showSetupScreen=true&disableVideoBackground=true`;
 };

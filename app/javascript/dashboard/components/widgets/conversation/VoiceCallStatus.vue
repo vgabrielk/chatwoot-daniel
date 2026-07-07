@@ -21,7 +21,6 @@ const ICON_MAP = {
   [VOICE_CALL_STATUS.IN_PROGRESS]: 'i-ph-phone-call',
   [VOICE_CALL_STATUS.NO_ANSWER]: 'i-ph-phone-x',
   [VOICE_CALL_STATUS.FAILED]: 'i-ph-phone-x',
-  [VOICE_CALL_STATUS.REJECTED]: 'i-ph-phone-x',
 };
 
 const COLOR_MAP = {
@@ -30,18 +29,13 @@ const COLOR_MAP = {
   [VOICE_CALL_STATUS.COMPLETED]: 'text-n-slate-11',
   [VOICE_CALL_STATUS.NO_ANSWER]: 'text-n-ruby-9',
   [VOICE_CALL_STATUS.FAILED]: 'text-n-ruby-9',
-  [VOICE_CALL_STATUS.REJECTED]: 'text-n-ruby-9',
 };
 
 const isOutbound = computed(
   () => props.direction === VOICE_CALL_DIRECTION.OUTBOUND
 );
 const isFailed = computed(() =>
-  [
-    VOICE_CALL_STATUS.NO_ANSWER,
-    VOICE_CALL_STATUS.FAILED,
-    VOICE_CALL_STATUS.REJECTED,
-  ].includes(props.status)
+  [VOICE_CALL_STATUS.NO_ANSWER, VOICE_CALL_STATUS.FAILED].includes(props.status)
 );
 
 const labelKey = computed(() => {

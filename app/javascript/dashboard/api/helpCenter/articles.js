@@ -16,7 +16,6 @@ class ArticlesAPI extends PortalsAPI {
     authorId,
     categorySlug,
     sort,
-    query,
   }) {
     const url = getArticleSearchURL({
       pageNumber,
@@ -26,7 +25,6 @@ class ArticlesAPI extends PortalsAPI {
       authorId,
       categorySlug,
       sort,
-      query,
       host: this.url,
     });
 

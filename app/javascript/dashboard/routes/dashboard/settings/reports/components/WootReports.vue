@@ -69,9 +69,6 @@ export default {
     isAgentType() {
       return this.type === 'agent';
     },
-    selectedFilterId() {
-      return this.selectedFilter?.id || null;
-    },
     reportKeys() {
       return {
         CONVERSATIONS: 'conversations_count',
@@ -184,10 +181,5 @@ export default {
     v-if="filterItemsList.length"
     :group-by="groupBy"
     :report-keys="reportKeys"
-    :from="from"
-    :to="to"
-    :report-type="type"
-    :selected-item-id="selectedFilterId"
-    :business-hours="businessHours"
   />
 </template>

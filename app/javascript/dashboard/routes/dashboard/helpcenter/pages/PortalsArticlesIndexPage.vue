@@ -1,17 +1,15 @@
 <script setup>
 import { computed, ref, onMounted, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { useMapGetter, useStore } from 'dashboard/composables/store.js';
 import allLocales from 'shared/constants/locales.js';
 import { getArticleStatus } from 'dashboard/helper/portalHelper.js';
 import ArticlesPage from 'dashboard/components-next/HelpCenter/Pages/ArticlePage/ArticlesPage.vue';
 
 const route = useRoute();
-const router = useRouter();
 const store = useStore();
 
 const pageNumber = ref(1);
-const searchQuery = ref(route.query.search || '');
 
 const allArticles = useMapGetter('articles/allArticles');
 const articlesSortedByPosition = useMapGetter(
@@ -76,21 +74,11 @@ const fetchArticles = ({ pageNumber: pageNumberParam } = {}) => {
     status: status.value,
     authorId: author.value,
     categorySlug: selectedCategorySlug.value,
-    query: searchQuery.value || undefined,
   });
 };
 
 const onPageChange = pageNumberParam => {
   fetchArticles({ pageNumber: pageNumberParam });
-};
-
-const onSearch = query => {
-  searchQuery.value = query;
-  pageNumber.value = 1;
-  router.replace({
-    query: { ...route.query, search: query || undefined },
-  });
-  fetchArticles({ pageNumber: 1 });
 };
 
 const fetchPortalAndItsCategories = async locale => {
@@ -130,7 +118,6 @@ watch(
       :portal-meta="portalMeta"
       :is-category-articles="isCategoryArticles"
       @page-change="onPageChange"
-      @search="onSearch"
       @fetch-portal="fetchPortalAndItsCategories"
       @refresh-articles="fetchArticles"
     />

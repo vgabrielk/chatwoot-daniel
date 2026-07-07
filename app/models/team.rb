@@ -5,8 +5,6 @@
 #  id                :bigint           not null, primary key
 #  allow_auto_assign :boolean          default(TRUE)
 #  description       :text
-#  icon              :string           default("")
-#  icon_color        :string           default("")
 #  name              :string           not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
@@ -64,9 +62,7 @@ class Team < ApplicationRecord
   def push_event_data
     {
       id: id,
-      name: name,
-      icon: icon,
-      icon_color: icon_color
+      name: name
     }
   end
 end

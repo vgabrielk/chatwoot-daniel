@@ -30,13 +30,10 @@ const debouncedEmit = debounce(
   500
 );
 
-const onInput = e => {
-  // Use the DOM value, not searchQuery.value: the defineModel ref updates a tick
-  // later, so reading it back here lags one character behind.
-  const value = e.target.value;
-  debouncedEmit(value);
+const onInput = () => {
+  debouncedEmit(searchQuery.value);
 
-  if (value.trim()) {
+  if (searchQuery.value.trim()) {
     showRecentSearches.value = false;
   } else if (isInputFocused.value) {
     showRecentSearches.value = true;

@@ -35,11 +35,8 @@ class AutoAssignment::AssignmentService
   def unassigned_conversations(limit)
     scope = inbox.conversations.unassigned.open
 
-    # Skip stale backlog with no activity beyond the policy's age threshold (defaults to 7 days)
-    policy = inbox.assignment_policy
-    scope = apply_age_exclusions(scope, policy&.exclude_older_than_hours)
-
     # Apply conversation priority using assignment policy if available
+    policy = inbox.assignment_policy
     scope = if policy&.longest_waiting?
               scope.reorder(last_activity_at: :asc, created_at: :asc)
             else
@@ -47,16 +44,6 @@ class AutoAssignment::AssignmentService
             end
 
     scope.limit(limit)
-  end
-
-  def apply_age_exclusions(scope, hours_threshold)
-    return scope if hours_threshold.blank?
-
-    hours = hours_threshold.to_i
-    return scope unless hours.positive?
-
-    # Use last_activity_at so reopened/active conversations aren't excluded by their original created_at
-    scope.where('conversations.last_activity_at >= ?', hours.hours.ago)
   end
 
   def find_available_agent(conversation = nil)

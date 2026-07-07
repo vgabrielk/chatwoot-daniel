@@ -51,9 +51,7 @@ const unreadCount = computed(() => props.chat.unread_count);
 const slaCardLabel = useTemplateRef('slaCardLabel');
 
 const hasSlaPolicyId = computed(
-  () =>
-    !props.currentContact?.blocked &&
-    (props.chat?.applied_sla?.id || slaCardLabel.value?.hasSlaThreshold)
+  () => props.chat?.sla_policy_id || slaCardLabel.value?.hasSlaThreshold
 );
 
 const selectedModel = computed({

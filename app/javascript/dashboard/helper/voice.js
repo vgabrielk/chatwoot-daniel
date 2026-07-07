@@ -1,7 +1,4 @@
-import {
-  CONTENT_TYPES,
-  VOICE_CALL_STATUS,
-} from 'dashboard/components-next/message/constants';
+import { CONTENT_TYPES } from 'dashboard/components-next/message/constants';
 import { MESSAGE_TYPE } from 'shared/constants/messages';
 import { useCallsStore } from 'dashboard/stores/calls';
 import types from 'dashboard/store/mutation-types';
@@ -10,7 +7,6 @@ export const TERMINAL_STATUSES = [
   'completed',
   'busy',
   'failed',
-  'rejected',
   'no-answer',
   'canceled',
   'missed',
@@ -104,18 +100,12 @@ export function handleVoiceCallCreated(
     callSid,
     callId,
     provider,
-    status,
     callDirection,
     conversationId,
     inboxId,
     assigneeId,
     senderId,
   } = extractCallData(message);
-
-  // A voice_call message can be created already terminal when the caller hangs
-  // up before connect. Only ring while the call is actually ringing; mirrors the
-  // guard in seedCallsFromHydratedMessages.
-  if (status !== VOICE_CALL_STATUS.RINGING) return;
 
   if (
     !shouldShowCall({

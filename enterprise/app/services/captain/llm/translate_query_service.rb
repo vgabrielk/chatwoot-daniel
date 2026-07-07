@@ -1,4 +1,6 @@
 class Captain::Llm::TranslateQueryService < Captain::BaseTaskService
+  MODEL = 'gpt-4.1-nano'.freeze
+
   pattr_initialize [:account!]
 
   def translate(query, target_language:)
@@ -9,7 +11,7 @@ class Captain::Llm::TranslateQueryService < Captain::BaseTaskService
       { role: 'user', content: query }
     ]
 
-    response = make_api_call(feature: 'help_center_query_translation', messages: messages)
+    response = make_api_call(model: MODEL, messages: messages)
     return query if response[:error]
 
     response[:message].strip

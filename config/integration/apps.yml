@@ -215,35 +215,28 @@ dyte:
       'type': 'object',
       'properties':
         {
-          'account_id': { 'type': 'string' },
-          'app_id': { 'type': 'string' },
-          'api_token': { 'type': 'string' },
+          'api_key': { 'type': 'string' },
+          'organization_id': { 'type': 'string' },
         },
-      'required': ['account_id', 'app_id', 'api_token'],
+      'required': ['api_key', 'organization_id'],
       'additionalProperties': false,
     }
   settings_form_schema:
     [
       {
-        'label': 'Cloudflare Account ID',
+        'label': 'Organization ID',
         'type': 'text',
-        'name': 'account_id',
+        'name': 'organization_id',
         'validation': 'required',
       },
       {
-        'label': 'RealtimeKit App ID',
+        'label': 'API Key',
         'type': 'text',
-        'name': 'app_id',
-        'validation': 'required',
-      },
-      {
-        'label': 'Cloudflare API Token',
-        'type': 'text',
-        'name': 'api_token',
+        'name': 'api_key',
         'validation': 'required',
       },
     ]
-  visible_properties: ['account_id', 'app_id']
+  visible_properties: ['organization_id']
 
 shopify:
   id: shopify

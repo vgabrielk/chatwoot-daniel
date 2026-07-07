@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
-import { evaluateSLAStatus } from 'dashboard/helper/slaHelper';
+import { evaluateSLAStatus } from '@chatwoot/utils';
 
 import Icon from 'dashboard/components-next/icon/Icon.vue';
 import Label from 'dashboard/components-next/label/Label.vue';
@@ -27,7 +27,6 @@ defineOptions({
 });
 
 const appliedSLA = computed(() => props.chat?.applied_sla);
-const slaEvents = computed(() => props.chat?.sla_events);
 const hasSlaThreshold = computed(() => slaStatus.value?.threshold);
 const isSlaMissed = computed(() => slaStatus.value?.isSlaMissed);
 
@@ -35,7 +34,6 @@ const updateSlaStatus = () => {
   slaStatus.value = evaluateSLAStatus({
     appliedSla: appliedSLA.value || {},
     chat: props.chat,
-    slaEvents: slaEvents.value || [],
   });
 };
 

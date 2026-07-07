@@ -210,9 +210,9 @@ const handleClick = id => {
         </div>
       </div>
     </div>
-    <div class="flex items-center justify-between w-full gap-2 sm:gap-4">
-      <div class="flex items-center min-w-0 gap-2 sm:gap-4">
-        <div class="flex items-center min-w-0 gap-1">
+    <div class="flex items-center justify-between w-full gap-4">
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-1">
           <Avatar
             :name="authorName"
             :src="authorThumbnailSrc"
@@ -223,17 +223,19 @@ const handleClick = id => {
             {{ authorName || '-' }}
           </span>
         </div>
-        <span class="flex items-center min-w-0 gap-1 text-sm text-n-slate-11">
+        <span
+          class="flex items-center gap-1 text-sm whitespace-nowrap text-n-slate-11"
+        >
           <EmojiIcon
             v-if="category?.icon"
             :value="category.icon"
             :color="category.icon_color"
             class="flex-shrink-0 size-4"
           />
-          <span class="truncate">{{ categoryName }}</span>
+          {{ categoryName }}
         </span>
         <div
-          class="inline-flex items-center gap-1 text-n-slate-11 whitespace-nowrap shrink-0"
+          class="inline-flex items-center gap-1 text-n-slate-11 whitespace-nowrap"
         >
           <Icon icon="i-lucide-eye" class="size-4" />
           <span class="text-sm">
@@ -245,7 +247,7 @@ const handleClick = id => {
           </span>
         </div>
       </div>
-      <span class="text-sm text-n-slate-11 line-clamp-1 shrink-0">
+      <span class="text-sm text-n-slate-11 line-clamp-1">
         {{ lastUpdatedAt }}
       </span>
     </div>

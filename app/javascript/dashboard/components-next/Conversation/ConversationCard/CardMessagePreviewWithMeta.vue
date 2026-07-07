@@ -16,10 +16,6 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-  contact: {
-    type: Object,
-    required: true,
-  },
 });
 
 const { t } = useI18n();
@@ -53,9 +49,7 @@ const unreadMessagesCount = computed(() => {
 
 const hasSlaThreshold = computed(() => {
   return (
-    !props.contact?.blocked &&
-    slaCardLabelRef.value?.hasSlaThreshold &&
-    props.conversation?.appliedSla?.id
+    slaCardLabelRef.value?.hasSlaThreshold && props.conversation?.slaPolicyId
   );
 });
 

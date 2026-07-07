@@ -93,9 +93,7 @@ const hasMultipleInboxes = computed(
   () => store.getters['inboxes/getInboxes'].length > 1
 );
 
-const hasSlaPolicyId = computed(
-  () => props.chat?.applied_sla?.id && !currentContact.value?.blocked
-);
+const hasSlaPolicyId = computed(() => props.chat?.sla_policy_id);
 
 const copyConversationId = async () => {
   try {

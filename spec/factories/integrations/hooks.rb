@@ -14,7 +14,7 @@ FactoryBot.define do
 
     trait :dyte do
       app_id { 'dyte' }
-      settings { { account_id: 'account_id', app_id: 'app_id', api_token: 'api_token' } }
+      settings { { api_key: 'api_key', organization_id: 'org_id' } }
     end
 
     trait :google_translate do
