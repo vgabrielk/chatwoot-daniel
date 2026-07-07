@@ -14,9 +14,11 @@ class Conversations::PermissionFilterService
   end
 
   private
-
   def accessible_conversations
+    team_ids = user.team_ids.presence || [0] # Fallback to prevent invalid SQL if no teams
+
     conversations.where(inbox: user.inboxes.where(account_id: account.id))
+                 .where('assignee_id = ? OR (team_id IN (?) AND assignee_id IS NULL)', user.id, team_ids)
   end
 
   def account_user
