@@ -296,7 +296,8 @@ export default {
       <img
         :src="'/logo.png'"
         :alt="globalConfig.installationName"
-        class="block w-auto h-8 mx-auto"
+        class="block mx-auto"
+        style="width: 120px; height: 120px;"
       />
       <h2 class="mt-6 text-3xl font-medium text-center text-n-slate-12">
         {{ replaceInstallationName($t('LOGIN.TITLE')) }}
