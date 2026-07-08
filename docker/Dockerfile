@@ -12,12 +12,23 @@ COPY app/services/conversations/permission_filter_service.rb /app/app/services/c
 # 3. Filtro de busca global (search service)
 COPY app/services/search_service.rb /app/app/services/search_service.rb
 
-# 4. Logo customizada no painel (Logo.vue)
+# 4. Logo customizada no painel (Logo.vue) and Sidebar
 COPY app/javascript/dashboard/components-next/icon/Logo.vue /app/app/javascript/dashboard/components-next/icon/Logo.vue
+COPY app/javascript/dashboard/components-next/sidebar/Sidebar.vue /app/app/javascript/dashboard/components-next/sidebar/Sidebar.vue
 
 # 5. Logo nas views do super admin e onboarding
 COPY app/views/super_admin/devise/sessions/new.html.erb /app/app/views/super_admin/devise/sessions/new.html.erb
 COPY app/views/installation/onboarding/index.html.erb /app/app/views/installation/onboarding/index.html.erb
 COPY app/views/super_admin/application/_navigation.html.erb /app/app/views/super_admin/application/_navigation.html.erb
+
+# 6. Controllers customizados para permissões e restrição de atribuição
+COPY app/controllers/api/v1/accounts/conversations/assignments_controller.rb /app/app/controllers/api/v1/accounts/conversations/assignments_controller.rb
+COPY app/controllers/api/v1/accounts/conversations_controller.rb /app/app/controllers/api/v1/accounts/conversations_controller.rb
+
+# Instala pnpm globalmente, instala dependências e compila assets
+RUN npm install -g pnpm@10.2.0
+RUN pnpm install --frozen-lockfile
+RUN RAILS_ENV=production SECRET_KEY_BASE=precompile_placeholder bundle exec rails assets:precompile
+RUN rm -rf node_modules tmp/cache
 
 EXPOSE 3000
