@@ -24,8 +24,8 @@ services:
       - postgres
       - redis
     entrypoint: docker/entrypoints/rails.sh
-    expose:
-      - "3000"
+    ports:
+      - "3000:3000"
     command:
       - sh
       - -c
