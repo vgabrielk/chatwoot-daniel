@@ -294,7 +294,7 @@ export default {
   >
     <section class="max-w-5xl mx-auto">
       <img
-        src="/logo.png"
+        :src="'/logo.png'"
         :alt="globalConfig.installationName"
         class="block w-auto h-8 mx-auto"
       />

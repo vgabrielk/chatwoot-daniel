@@ -9,6 +9,6 @@ const globalConfig = useMapGetter('globalConfig/get');
 <template>
   <img
     v-bind="attrs"
-    src="/logo.png"
+    :src="'/logo.png'"
   />
 </template>
