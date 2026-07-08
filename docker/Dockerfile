@@ -25,6 +25,13 @@ COPY app/views/super_admin/application/_navigation.html.erb /app/app/views/super
 COPY app/controllers/api/v1/accounts/conversations/assignments_controller.rb /app/app/controllers/api/v1/accounts/conversations/assignments_controller.rb
 COPY app/controllers/api/v1/accounts/conversations_controller.rb /app/app/controllers/api/v1/accounts/conversations_controller.rb
 
+# 7. Arquivos da logo e configurações customizadas
+COPY public/logo.png /app/public/logo.png
+COPY app/javascript/v3/views/login/Index.vue /app/app/javascript/v3/views/login/Index.vue
+COPY app/javascript/dashboard/components-next/year-in-review/ShareModal.vue /app/app/javascript/dashboard/components-next/year-in-review/ShareModal.vue
+COPY config/installation_config.yml /app/config/installation_config.yml
+COPY enterprise/config/premium_installation_config.yml /app/enterprise/config/premium_installation_config.yml
+
 # Instala nodejs e npm via apk para permitir a compilação dos assets
 RUN apk update && apk add --no-cache nodejs npm
 
