@@ -9,6 +9,6 @@ const globalConfig = useMapGetter('globalConfig/get');
 <template>
   <img
     v-bind="attrs"
-    src="https://megapisos.net.br/wp-content/uploads/2021/11/Logo-s-fundo-1.png"
+    src="/logo.png"
   />
 </template>
