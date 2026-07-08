@@ -1,3 +1,4 @@
+# Custom Chatwoot Image - Megapisos
 # Baseado na imagem oficial do Chatwoot já compilada
 # Isso evita compilar todas as gems nativas do zero (que leva 1+ hora em Alpine)
 FROM chatwoot/chatwoot:v4.15.1
