@@ -25,10 +25,15 @@ COPY app/views/super_admin/application/_navigation.html.erb /app/app/views/super
 COPY app/controllers/api/v1/accounts/conversations/assignments_controller.rb /app/app/controllers/api/v1/accounts/conversations/assignments_controller.rb
 COPY app/controllers/api/v1/accounts/conversations_controller.rb /app/app/controllers/api/v1/accounts/conversations_controller.rb
 
+# Instala nodejs e npm via apk para permitir a compilação dos assets
+RUN apk update && apk add --no-cache nodejs npm
+
 # Instala pnpm globalmente, instala dependências e compila assets
 RUN npm install -g pnpm@10.2.0
 RUN pnpm install --frozen-lockfile
 RUN RAILS_ENV=production SECRET_KEY_BASE=precompile_placeholder bundle exec rails assets:precompile
-RUN rm -rf node_modules tmp/cache
+
+# Limpa o cache e remove nodejs/npm instalados temporariamente
+RUN rm -rf node_modules tmp/cache && apk del nodejs npm
 
 EXPOSE 3000
