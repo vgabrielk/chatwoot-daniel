@@ -33,8 +33,7 @@ class SearchService
   def filter_conversations
     conversations_query = current_account.conversations.where(inbox_id: accessable_inbox_ids)
     unless account_user.administrator?
-      team_ids = current_user.team_ids.presence || [0]
-      conversations_query = conversations_query.where('assignee_id = ? OR (team_id IN (?) AND assignee_id IS NULL)', current_user.id, team_ids)
+      conversations_query = conversations_query.where(assignee_id: current_user.id)
     end
     conversations_query = conversations_query.joins('INNER JOIN contacts ON conversations.contact_id = contacts.id')
                                              .where("cast(conversations.display_id as text) ILIKE :search OR contacts.name ILIKE :search OR contacts.email
@@ -112,8 +111,7 @@ class SearchService
     query = current_account.messages.where('created_at >= ?', 3.months.ago)
     query = query.where(inbox_id: accessable_inbox_ids) unless should_skip_inbox_filtering?
     unless account_user.administrator?
-      team_ids = current_user.team_ids.presence || [0]
-      query = query.joins(:conversation).where('conversations.assignee_id = ? OR (conversations.team_id IN (?) AND conversations.assignee_id IS NULL)', current_user.id, team_ids)
+      query = query.joins(:conversation).where('conversations.assignee_id = ?', current_user.id)
     end
     query
   end

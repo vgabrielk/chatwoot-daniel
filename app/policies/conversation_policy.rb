@@ -13,10 +13,7 @@ class ConversationPolicy < ApplicationPolicy
 
   private
   def agent_can_view_conversation?
-    return true if assigned_to_user?
-    return true if team_access? && record.assignee_id.blank?
-
-    false
+    assigned_to_user?
   end
 
   def administrator?
