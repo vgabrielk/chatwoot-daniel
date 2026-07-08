@@ -95,7 +95,7 @@ const generateImage = async () => {
     );
 
     const logo = new Image();
-    logo.src = 'https://megapisos.net.br/wp-content/uploads/2021/11/Logo-s-fundo-1.png';
+    logo.src = '/logo.png';
     await new Promise(resolve => {
       logo.onload = resolve;
     });
