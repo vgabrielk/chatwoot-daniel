@@ -36,3 +36,9 @@ jobs:
             ghcr.io/vgabrielk/chatwoot-custom:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Trigger Coolify Deployment
+        if: success()
+        run: |
+          curl -i -X GET "${{ secrets.COOLIFY_WEBHOOK }}" \
+            -H "Authorization: Bearer ${{ secrets.COOLIFY_TOKEN }}"
