@@ -10,6 +10,7 @@ import { useSidebarKeyboardShortcuts } from './useSidebarKeyboardShortcuts';
 import { vOnClickOutside } from '@vueuse/components';
 import { FEATURE_FLAGS } from 'dashboard/featureFlags';
 import { useWindowSize, useEventListener } from '@vueuse/core';
+import { useAdmin } from 'dashboard/composables/useAdmin';
 
 import Button from 'dashboard/components-next/button/Button.vue';
 import SidebarGroup from './SidebarGroup.vue';
@@ -46,6 +47,7 @@ const { accountScopedRoute, isOnChatwootCloud } = useAccount();
 const store = useStore();
 const searchShortcut = useKbd([`$mod`, 'k']);
 const { t } = useI18n();
+const { isAdmin } = useAdmin();
 
 const isACustomBrandedInstance = useMapGetter(
   'globalConfig/isACustomBrandedInstance'
@@ -330,49 +332,53 @@ const menuItems = computed(() => {
       label: t('SIDEBAR.CONVERSATIONS'),
       icon: 'i-lucide-message-circle',
       children: [
-        {
-          name: 'All',
-          label: t('SIDEBAR.ALL_CONVERSATIONS'),
-          icon: 'i-lucide-inbox',
-          badgeCount: allUnreadCount.value,
-          activeOn: ['inbox_conversation'],
-          to: accountScopedRoute('home'),
-        },
-        {
-          name: 'Mentions',
-          label: t('SIDEBAR.MENTIONED_CONVERSATIONS'),
-          icon: 'i-lucide-at-sign',
-          activeOn: ['conversation_through_mentions'],
-          to: accountScopedRoute('conversation_mentions'),
-        },
-        {
-          name: 'Participating',
-          label: t('SIDEBAR.PARTICIPATING_CONVERSATIONS'),
-          icon: 'i-lucide-user-round-check',
-          activeOn: ['conversation_through_participating'],
-          to: accountScopedRoute('conversation_participating'),
-        },
-        {
-          name: 'Unattended',
-          activeOn: ['conversation_through_unattended'],
-          label: t('SIDEBAR.UNATTENDED_CONVERSATIONS'),
-          icon: 'i-lucide-clock-alert',
-          to: accountScopedRoute('conversation_unattended'),
-        },
-        {
-          name: 'Folders',
-          label: t('SIDEBAR.CUSTOM_VIEWS_FOLDER'),
-          icon: 'i-lucide-folder',
-          activeOn: ['conversations_through_folders'],
-          ...buildSortConfig(SIDEBAR_SORT_SECTIONS.FOLDERS),
-          collapsible: true,
-          showTreeLine: true,
-          children: sortedFolders.value.map(view => ({
-            name: `${view.name}-${view.id}`,
-            label: view.name,
-            to: accountScopedRoute('folder_conversations', { id: view.id }),
-          })),
-        },
+        ...(isAdmin.value
+          ? [
+              {
+                name: 'All',
+                label: t('SIDEBAR.ALL_CONVERSATIONS'),
+                icon: 'i-lucide-inbox',
+                badgeCount: allUnreadCount.value,
+                activeOn: ['inbox_conversation'],
+                to: accountScopedRoute('home'),
+              },
+              {
+                name: 'Mentions',
+                label: t('SIDEBAR.MENTIONED_CONVERSATIONS'),
+                icon: 'i-lucide-at-sign',
+                activeOn: ['conversation_through_mentions'],
+                to: accountScopedRoute('conversation_mentions'),
+              },
+              {
+                name: 'Participating',
+                label: t('SIDEBAR.PARTICIPATING_CONVERSATIONS'),
+                icon: 'i-lucide-user-round-check',
+                activeOn: ['conversation_through_participating'],
+                to: accountScopedRoute('conversation_participating'),
+              },
+              {
+                name: 'Unattended',
+                activeOn: ['conversation_through_unattended'],
+                label: t('SIDEBAR.UNATTENDED_CONVERSATIONS'),
+                icon: 'i-lucide-clock-alert',
+                to: accountScopedRoute('conversation_unattended'),
+              },
+              {
+                name: 'Folders',
+                label: t('SIDEBAR.CUSTOM_VIEWS_FOLDER'),
+                icon: 'i-lucide-folder',
+                activeOn: ['conversations_through_folders'],
+                ...buildSortConfig(SIDEBAR_SORT_SECTIONS.FOLDERS),
+                collapsible: true,
+                showTreeLine: true,
+                children: sortedFolders.value.map(view => ({
+                  name: `${view.name}-${view.id}`,
+                  label: view.name,
+                  to: accountScopedRoute('folder_conversations', { id: view.id }),
+                })),
+              },
+            ]
+          : []),
         {
           name: 'Teams',
           label: t('SIDEBAR.TEAMS'),
@@ -388,50 +394,54 @@ const menuItems = computed(() => {
             to: accountScopedRoute('team_conversations', { teamId: team.id }),
           })),
         },
-        {
-          name: 'Channels',
-          label: t('SIDEBAR.CHANNELS'),
-          icon: 'i-lucide-mailbox',
-          activeOn: ['conversation_through_inbox'],
-          ...buildSortConfig(SIDEBAR_SORT_SECTIONS.CHANNELS),
-          collapsible: true,
-          showTreeLine: true,
-          children: sortedInboxes.value.map(inbox => ({
-            name: `${inbox.name}-${inbox.id}`,
-            label: inbox.name,
-            badgeCount: getInboxUnreadCount.value(inbox.id),
-            icon: h(ChannelIcon, { inbox, class: 'size-[16px]' }),
-            to: accountScopedRoute('inbox_dashboard', { inbox_id: inbox.id }),
-            component: leafProps =>
-              h(ChannelLeaf, {
-                label: leafProps.label,
-                active: leafProps.active,
-                inbox,
-                badgeCount: leafProps.badgeCount,
-              }),
-          })),
-        },
-        {
-          name: 'Labels',
-          label: t('SIDEBAR.LABELS'),
-          icon: 'i-lucide-tag',
-          activeOn: ['conversations_through_label'],
-          ...buildSortConfig(SIDEBAR_SORT_SECTIONS.LABELS),
-          collapsible: true,
-          showTreeLine: true,
-          children: sortedLabels.value.map(label => ({
-            name: `${label.title}-${label.id}`,
-            label: label.title,
-            badgeCount: getLabelUnreadCount.value(label.id),
-            icon: h('span', {
-              class: `size-[8px] rounded-sm`,
-              style: { backgroundColor: label.color },
-            }),
-            to: accountScopedRoute('label_conversations', {
-              label: label.title,
-            }),
-          })),
-        },
+        ...(isAdmin.value
+          ? [
+              {
+                name: 'Channels',
+                label: t('SIDEBAR.CHANNELS'),
+                icon: 'i-lucide-mailbox',
+                activeOn: ['conversation_through_inbox'],
+                ...buildSortConfig(SIDEBAR_SORT_SECTIONS.CHANNELS),
+                collapsible: true,
+                showTreeLine: true,
+                children: sortedInboxes.value.map(inbox => ({
+                  name: `${inbox.name}-${inbox.id}`,
+                  label: inbox.name,
+                  badgeCount: getInboxUnreadCount.value(inbox.id),
+                  icon: h(ChannelIcon, { inbox, class: 'size-[16px]' }),
+                  to: accountScopedRoute('inbox_dashboard', { inbox_id: inbox.id }),
+                  component: leafProps =>
+                    h(ChannelLeaf, {
+                      label: leafProps.label,
+                      active: leafProps.active,
+                      inbox,
+                      badgeCount: leafProps.badgeCount,
+                    }),
+                })),
+              },
+              {
+                name: 'Labels',
+                label: t('SIDEBAR.LABELS'),
+                icon: 'i-lucide-tag',
+                activeOn: ['conversations_through_label'],
+                ...buildSortConfig(SIDEBAR_SORT_SECTIONS.LABELS),
+                collapsible: true,
+                showTreeLine: true,
+                children: sortedLabels.value.map(label => ({
+                  name: `${label.title}-${label.id}`,
+                  label: label.title,
+                  badgeCount: getLabelUnreadCount.value(label.id),
+                  icon: h('span', {
+                    class: `size-[8px] rounded-sm`,
+                    style: { backgroundColor: label.color },
+                  }),
+                  to: accountScopedRoute('label_conversations', {
+                    label: label.title,
+                  }),
+                })),
+              },
+            ]
+          : []),
       ],
     },
     {
